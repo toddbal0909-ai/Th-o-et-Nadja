@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Théo &amp; Nadja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF3EE;
+    --blush:#F1D9D3;
+    --rose:#C67C82;
+    --wine:#5B3438;
+    --wine-soft:#8B5A5C;
+    --thread:#B23A48;
+    --gold:#C9A55C;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--wine);
+    font-family:'Work Sans', sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+  h1,h2,h3, .display{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+  }
+  .italic{font-style:italic;font-weight:400;}
+
+  /* ---------- INTRO / HEARTBEAT ---------- */
+  body.locked{overflow:hidden;}
+  .intro-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    background:var(--cream);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:opacity 0.7s ease, visibility 0.7s ease;
+  }
+  .intro-overlay.hide{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+  .heart-shape{
+    position:relative;
+    width:52px;
+    height:46px;
+    animation:heartbeat 1.3s ease-in-out infinite;
+  }
+  .heart-shape::before,
+  .heart-shape::after{
+    content:"";
+    position:absolute;
+    top:0;
+    width:27px;
+    height:43px;
+    background:var(--thread);
+    border-radius:27px 27px 0 0;
+  }
+  .heart-shape::before{
+    left:26px;
+    transform:rotate(-45deg);
+    transform-origin:0 100%;
+  }
+  .heart-shape::after{
+    left:0;
+    transform:rotate(45deg);
+    transform-origin:100% 100%;
+  }
+  @keyframes heartbeat{
+    0%,100%{transform:scale(1);}
+    15%{transform:scale(1.18);}
+    30%{transform:scale(1);}
+    45%{transform:scale(1.18);}
+    60%{transform:scale(1);}
+  }
+  .intro-caption{
+    margin-top:2.2rem;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:0.9rem;
+    letter-spacing:0.1em;
+    color:var(--wine-soft);
+    opacity:0;
+    animation:fadeIn 1s ease forwards;
+    animation-delay:1.6s;
+  }
+  @keyframes fadeIn{
+    to{opacity:1;}
+  }
+  .riddle-box{
+    margin-top:2.4rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1rem;
+    opacity:0;
+    animation:fadeIn 1s ease forwards;
+    animation-delay:1.4s;
+    padding:0 1.5rem;
+    cursor:default;
+  }
+  .riddle-question{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1rem;
+    color:var(--wine-soft);
+    text-align:center;
+    max-width:26ch;
+  }
+  .riddle-input{
+    border:none;
+    border-bottom:1.5px solid var(--rose);
+    background:transparent;
+    text-align:center;
+    font-family:'Fraunces', serif;
+    font-size:1.1rem;
+    color:var(--wine);
+    padding:0.4rem 0.2rem;
+    width:200px;
+    outline:none;
+  }
+  .riddle-input::placeholder{color:var(--wine-soft); opacity:0.5;}
+  .riddle-submit{
+    background:var(--thread);
+    color:var(--cream);
+    border:none;
+    padding:0.55rem 1.6rem;
+    border-radius:30px;
+    font-family:'Work Sans', sans-serif;
+    font-size:0.75rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+  .riddle-feedback{
+    font-size:0.75rem;
+    color:var(--thread);
+    min-height:1em;
+    font-style:italic;
+  }
+  @keyframes shake{
+    10%,90%{transform:translateX(-2px);}
+    20%,80%{transform:translateX(4px);}
+    30%,50%,70%{transform:translateX(-8px);}
+    40%,60%{transform:translateX(8px);}
+  }
+  .shake{animation:shake 0.5s;}
+
+  .welcome-message{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    gap:0.8rem;
+    text-align:center;
+    padding:0 1.5rem;
+  }
+  .welcome-message.show{
+    display:flex;
+    animation:welcomeIn 1.1s ease forwards;
+  }
+  .welcome-message .display{
+    font-size:clamp(1.8rem, 7vw, 2.6rem);
+    color:var(--wine);
+  }
+  .welcome-message .welcome-sub{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:0.95rem;
+    color:var(--rose);
+  }
+  @keyframes welcomeIn{
+    0%{opacity:0; transform:translateY(14px) scale(0.96);}
+    100%{opacity:1; transform:translateY(0) scale(1);}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    position:relative;
+    padding:2rem 1.5rem;
+  }
+  .hero-eyebrow{
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    font-size:0.7rem;
+    color:var(--wine-soft);
+    margin-bottom:1.5rem;
+  }
+  .hero-names{
+    font-size:clamp(3rem, 12vw, 7rem);
+    line-height:0.95;
+    display:flex;
+    align-items:center;
+    gap:0.4em;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .hero-amp{
+    font-style:italic;
+    color:var(--rose);
+    font-size:0.6em;
+  }
+  .hero-nicknames{
+    margin-top:0.9rem;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:0.95rem;
+    letter-spacing:0.08em;
+    color:var(--rose);
+  }
+  .hero-sub{
+    margin-top:1.75rem;
+    font-size:1.05rem;
+    color:var(--wine-soft);
+    max-width:32ch;
+  }
+  .scroll-hint{
+    position:absolute;
+    bottom:2.5rem;
+    font-size:0.7rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--wine-soft);
+    opacity:0.7;
+  }
+  .scroll-hint::after{
+    content:"";
+    display:block;
+    width:1px;
+    height:34px;
+    background:var(--wine-soft);
+    margin:0.6rem auto 0;
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:0.2;}
+    50%{opacity:0.8;}
+  }
+
+  /* ---------- COUNTDOWN ---------- */
+  .countdown-section{
+    padding:6rem 1.5rem 7rem;
+    text-align:center;
+    background:var(--blush);
+    position:relative;
+  }
+  .section-label{
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    font-size:0.72rem;
+    color:var(--wine-soft);
+    margin-bottom:0.75rem;
+  }
+  .countdown-title{
+    font-size:clamp(1.8rem, 5vw, 2.6rem);
+    margin-bottom:3rem;
+  }
+  .countdown-grid{
+    display:flex;
+    justify-content:center;
+    gap:clamp(1rem, 4vw, 3rem);
+    flex-wrap:wrap;
+  }
+  .count-unit{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-width:80px;
+  }
+  .count-num{
+    font-family:'Fraunces', serif;
+    font-size:clamp(2.4rem, 7vw, 4rem);
+    line-height:1;
+    color:var(--thread);
+    font-variant-numeric:tabular-nums;
+  }
+  .count-unit-label{
+    margin-top:0.6rem;
+    font-size:0.7rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--wine-soft);
+  }
+  .countdown-date{
+    margin-top:2.5rem;
+    font-style:italic;
+    color:var(--wine-soft);
+    font-family:'Fraunces', serif;
+  }
+
+  /* ---------- TIMELINE ---------- */
+  .timeline-section{
+    padding:7rem 1.5rem;
+    max-width:760px;
+    margin:0 auto;
+  }
+  .timeline-header{
+    text-align:center;
+    margin-bottom:4.5rem;
+  }
+  .timeline-title{
+    font-size:clamp(2rem, 5vw, 2.8rem);
+  }
+  .thread-wrap{
+    position:relative;
+    padding-left:2.5rem;
+  }
+  .thread-line{
+    position:absolute;
+    left:6px;
+    top:8px;
+    bottom:8px;
+    width:2px;
+    background:linear-gradient(var(--thread), var(--rose));
+    transform-origin:top;
+  }
+  .timeline-item{
+    position:relative;
+    padding-bottom:3.5rem;
+  }
+  .timeline-item:last-child{padding-bottom:0;}
+  .timeline-dot{
+    position:absolute;
+    left:-2.5rem;
+    top:6px;
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:var(--cream);
+    border:2px solid var(--thread);
+  }
+  .timeline-date{
+    font-size:0.72rem;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    color:var(--rose);
+    margin-bottom:0.4rem;
+  }
+  .timeline-item h3{
+    font-size:1.4rem;
+    margin-bottom:0.5rem;
+    font-weight:400;
+    font-style:italic;
+  }
+  .timeline-item p{
+    color:var(--wine-soft);
+    font-size:0.95rem;
+    line-height:1.6;
+  }
+  .editable{
+    border-left:2px dashed var(--gold);
+    padding-left:0.8rem;
+  }
+  .edit-tag{
+    display:inline-block;
+    font-size:0.65rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--gold);
+    background:rgba(201,165,92,0.12);
+    padding:0.15rem 0.5rem;
+    border-radius:3px;
+    margin-bottom:0.4rem;
+  }
+
+  /* ---------- LETTER ---------- */
+  .letter-section{
+    background:var(--wine);
+    color:var(--cream);
+    padding:7rem 1.5rem;
+    text-align:center;
+  }
+  .letter-section .section-label{color:var(--rose);}
+  .letter-title{
+    font-size:clamp(2rem, 5vw, 2.8rem);
+    margin-bottom:2.5rem;
+  }
+  .envelope{
+    max-width:480px;
+    margin:0 auto;
+    cursor:pointer;
+    user-select:none;
+  }
+  .envelope-body{
+    background:var(--blush);
+    color:var(--wine);
+    border-radius:6px;
+    padding:2.5rem 2rem;
+    position:relative;
+    box-shadow:0 20px 40px rgba(0,0,0,0.25);
+    transition:transform 0.4s ease;
+  }
+  .envelope:hover .envelope-body{transform:translateY(-4px);}
+  .envelope-flap{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1.1rem;
+    color:var(--wine-soft);
+  }
+  .envelope-cta{
+    margin-top:1.2rem;
+    font-size:0.7rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--thread);
+  }
+  .letter-content{
+    display:none;
+    max-width:480px;
+    margin:2rem auto 0;
+    background:var(--blush);
+    color:var(--wine);
+    border-radius:6px;
+    padding:2.5rem 2rem;
+    text-align:left;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1.05rem;
+    line-height:1.9;
+    box-shadow:0 20px 40px rgba(0,0,0,0.25);
+  }
+  .letter-content.open{display:block;}
+  .letter-content .edit-tag{margin-bottom:0.8rem;}
+  .letter-signature{
+    margin-top:1.5rem;
+    text-align:right;
+    color:var(--rose);
+  }
+
+  /* ---------- GALLERY ---------- */
+  .gallery-section{
+    padding:7rem 1.5rem;
+    text-align:center;
+  }
+  .gallery-title{
+    font-size:clamp(2rem, 5vw, 2.8rem);
+    margin-bottom:3.5rem;
+  }
+  .gallery-grid{
+    max-width:900px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1rem;
+  }
+  .gallery-slot{
+    aspect-ratio:1;
+    background:var(--blush);
+    border:1px dashed var(--rose);
+    border-radius:4px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--wine-soft);
+    font-size:1.8rem;
+    font-family:'Fraunces', serif;
+    overflow:hidden;
+  }
+  .gallery-slot img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform 0.5s ease;
+  }
+  .gallery-slot:hover img{
+    transform:scale(1.06);
+  }
+  @media (max-width:600px){
+    .gallery-grid{grid-template-columns:repeat(2, 1fr);}
+  }
+
+  footer{
+    text-align:center;
+    padding:3rem 1.5rem 4rem;
+    font-size:0.75rem;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    color:var(--wine-soft);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body class="locked">
+
+<div class="intro-overlay" id="intro-overlay">
+  <div class="heart-shape"></div>
+  <div class="riddle-box" onclick="event.stopPropagation()">
+    <div class="riddle-question">Quel est le prénom de la femme la plus belle du monde ?</div>
+    <input type="text" class="riddle-input" id="riddle-input" placeholder="Ta réponse..." autocomplete="off">
+    <button class="riddle-submit" id="riddle-submit">Entrer</button>
+    <div class="riddle-feedback" id="riddle-feedback"></div>
+  </div>
+  <div class="welcome-message" id="welcome-message">
+    <div class="heart-shape" style="width:34px;height:30px;"></div>
+    <h2 class="display">Bienvenue</h2>
+    <div class="welcome-sub">dans le site de nos un an, mon ange</div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-eyebrow">Depuis le 21 novembre</div>
+  <h1 class="hero-names">Théo <span class="hero-amp">&amp;</span> Nadja</h1>
+  <p class="hero-nicknames">George &amp; Joséphine</p>
+  <p class="hero-sub italic">Un fil rouge nous relie depuis le premier jour.</p>
+  <div class="scroll-hint">Découvrir</div>
+</section>
+
+<section class="countdown-section">
+  <div class="section-label">Bientôt</div>
+  <h2 class="countdown-title display">Notre premier anniversaire</h2>
+  <div class="countdown-grid">
+    <div class="count-unit"><div class="count-num" id="cd-days">--</div><div class="count-unit-label">Jours</div></div>
+    <div class="count-unit"><div class="count-num" id="cd-hours">--</div><div class="count-unit-label">Heures</div></div>
+    <div class="count-unit"><div class="count-num" id="cd-min">--</div><div class="count-unit-label">Minutes</div></div>
+    <div class="count-unit"><div class="count-num" id="cd-sec">--</div><div class="count-unit-label">Secondes</div></div>
+  </div>
+  <div class="countdown-date">21 novembre 2026 — un an ensemble</div>
+</section>
+
+<section class="timeline-section">
+  <div class="timeline-header">
+    <div class="section-label">Notre histoire</div>
+    <h2 class="timeline-title display">Le fil qui nous relie</h2>
+  </div>
+  <div class="thread-wrap">
+    <div class="thread-line" id="thread-line"></div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">8 octobre 2025</div>
+      <h3>Le premier regard</h3>
+      <p>C'était le jour de ton anniversaire, la toute première fois qu'on s'est parlé. Je t'ai souhaité ta fête, et on a enchaîné les snaps de nos têtes en faisant des grimaces. Le feeling est passé tout de suite : dès ce premier jour, j'ai senti quelque chose de différent. J'ai montré mon vrai moi sans réfléchir, et c'est là que je me suis dit que tu étais différente, toi aussi. Ce ressenti m'a donné confiance pour la suite. Je t'ai souhaité une dernière fois un joyeux anniversaire avant d'aller dormir, pendant que tu continuais ta soirée. Puis on s'est dit bonne nuit, bisous.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">17 octobre 2025</div>
+      <h3>Le premier rendez-vous</h3>
+      <p>Ce jour-là, il y avait le premier goûter de classe, avant les vacances. Ce goûter a particulièrement marqué le tout début de nous deux, avant même le flirt : on n'a pas passé une seconde l'un sans l'autre, à parler pendant tout le goûter. Puis il y a eu ce fameux champomy qu'Elliot avait apporté. Après en avoir servi à toute la classe, il ne restait plus qu'un verre. Je voulais te le laisser, mais tu m'as proposé qu'on prenne le même verre, et qu'on le partage ensemble. Le goûter s'est terminé, plein de nos discussions, et il était temps de partir en vacances. J'ai voulu te souhaiter de bonnes vacances, mais tu étais déjà partie — alors je t'ai envoyé un snap, et tu me l'as rendu. À partir de là, on s'est mis à se parler tous les jours, à apprendre à se connaître, jusqu'au flirt.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">21 novembre 2025</div>
+      <h3>Nous, officiellement</h3>
+      <p>Ce jour-là, je m'en souviens comme si c'était hier. Un vendredi. La veille, je t'avais proposé qu'on s'habille "corda" : on avait chacun un pull gris avec un col blanc qui dépassait, toi avec ta jupe noire, moi avec mon jean noir. La journée s'est passée normalement, puis est venu le moment de se dire au revoir. Jusque-là, notre seule façon de se quitter était un câlin. Mais ce jour-là, on a commencé par un câlin, puis on s'est embrassés pour la première fois. On est rentrés chacun chez nous après un dernier regard et un sourire amoureux. C'est ainsi qu'on s'est mis ensemble — et depuis ce jour, notre histoire de couple a pu commencer.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date editable">
+        <span class="edit-tag">à personnaliser</span><br>
+        21 novembre 2026
+      </div>
+      <h3>Un an</h3>
+      <p>[Et aujourd'hui, un an plus tard — ce que vous avez envie de dire.]</p>
+    </div>
+  </div>
+</section>
+
+<section class="letter-section">
+  <div class="section-label">Pour toi</div>
+  <h2 class="letter-title display">Une lettre</h2>
+  <div class="envelope" id="envelope" onclick="openLetter()">
+    <div class="envelope-body" id="envelope-closed">
+      <div class="envelope-flap">« Ouvre-moi quand tu seras prêt·e »</div>
+      <div class="envelope-cta">Toucher pour ouvrir</div>
+    </div>
+  </div>
+  <div class="letter-content" id="letter-content">
+    <p>Mon gros crâne, mon ange, ma chérie d'amour,</p>
+    <br>
+    <p>Cette première année m'a apporté une nouvelle vision des choses. Elle m'a appris ce qu'est le vrai amour : la confiance, la sécurité, une mentalité différente, de la fierté. J'ai appris que le vrai amour n'est pas fait que de moments joyeux.</p>
+    <br>
+    <p>Ce que j'aime chez toi ? Tout. J'embrasserais autant de fois qu'il faut tes qualités comme tes défauts. À mes yeux, ta silhouette est parfaite, chaque partie de toi fait de toi une femme magnifique — ton joli sourire, tes beaux yeux verts, tes cheveux blonds qui brillent, et tant d'autres choses encore. J'aime aussi ton caractère, toi qui es si solaire et sociable. Tu as tout d'une femme parfaite. Mais ce que je préfère chez toi, ça peut paraître tout simple : c'est la façon dont tu me montres ton amour, dont tu prends soin de moi, et dont tu es toujours à l'écoute.</p>
+    <br>
+    <p>S'il y a un souvenir qui m'a marqué, c'est la première fois que je suis venu chez toi. On s'est posés dans ton lit devant une vidéo, à se faire plein de câlins, de bisous, de papouilles l'un à l'autre. C'est à ce moment-là que j'ai ressenti mon premier vrai grand signe d'affection envers toi. Je me sentais en sécurité, et toi aussi.</p>
+    <br>
+    <p>Pour la suite, je n'espère que continuer avec toi. Chaque jour, tu me rappelles à quel point je t'aime, et tu es celle dont j'ai besoin pour toute la vie. On a chacun traversé de bons moments comme des mauvais, mais à chaque fois, on a su s'épauler l'un l'autre. Dans nos moments de tension, on n'a jamais cherché à mettre fin à notre histoire, mais toujours à se comprendre et à trouver une solution ensemble. Chaque moment passé avec toi est inoubliable, simple ou inattendu — je suis toujours le plus heureux à tes côtés.</p>
+    <div class="letter-signature">— Théo</div>
+  </div>
+</section>
+
+
+
+<footer>Théo &amp; Nadja — 21 novembre 2025</footer>
+
+<script>
+  // Intro heartbeat screen + énigme
+  const introOverlay = document.getElementById('intro-overlay');
+  const riddleInput = document.getElementById('riddle-input');
+  const riddleSubmit = document.getElementById('riddle-submit');
+  const riddleFeedback = document.getElementById('riddle-feedback');
+  const riddleBox = document.querySelector('.riddle-box');
+  const welcomeMessage = document.getElementById('welcome-message');
+  function enterSite(){
+    introOverlay.classList.add('hide');
+    document.body.classList.remove('locked');
+  }
+  introOverlay.addEventListener('click', function(){
+    riddleInput.focus();
+  });
+
+  function checkRiddle(){
+    const val = riddleInput.value.trim().toLowerCase();
+    if(val === 'nadja'){
+      riddleBox.style.display = 'none';
+      welcomeMessage.classList.add('show');
+      setTimeout(enterSite, 1900);
+    } else {
+      riddleFeedback.textContent = 'Essaie encore \u2764';
+      riddleBox.classList.remove('shake');
+      void riddleBox.offsetWidth;
+      riddleBox.classList.add('shake');
+      riddleInput.value = '';
+      riddleInput.focus();
+    }
+  }
+  riddleSubmit.addEventListener('click', checkRiddle);
+  riddleInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter') checkRiddle();
+  });
+
+</script>
+
+<script>
+  // Countdown
+  const target = new Date("2026-11-21T00:00:00");
+  function updateCountdown(){
+    const now = new Date();
+    let diff = target - now;
+    if(diff < 0) diff = 0;
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
+    const min = Math.floor((diff / (1000*60)) % 60);
+    const sec = Math.floor((diff / 1000) % 60);
+    document.getElementById('cd-days').textContent = days;
+    document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+    document.getElementById('cd-min').textContent = String(min).padStart(2,'0');
+    document.getElementById('cd-sec').textContent = String(sec).padStart(2,'0');
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // Envelope open
+  function openLetter(){
+    document.getElementById('envelope').style.display = 'none';
+    document.getElementById('letter-content').classList.add('open');
+  }
+
+  // Thread line scroll reveal
+  const thread = document.getElementById('thread-line');
+  const wrap = document.querySelector('.thread-wrap');
+  function updateThread(){
+    const rect = wrap.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const progress = Math.min(1, Math.max(0, (vh - rect.top) / (rect.height + vh*0.3)));
+    thread.style.transform = 'scaleY(' + progress + ')';
+  }
+  thread.style.transform = 'scaleY(0)';
+  window.addEventListener('scroll', updateThread);
+  window.addEventListener('resize', updateThread);
+  updateThread();
+</script>
+
+</body>
+</html>
